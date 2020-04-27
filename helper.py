@@ -97,7 +97,7 @@ def update_arch_repo(package_path: str, repo_path: str, repo_name: str):
 def main():
     args = get_commander_args()
     abs_download_path = os.path.abspath(os.path.expanduser(DownloadPath))
-    abs_repo_path = os.path.abspath(os.path.expanduser(ArchRepoPath))
+    abs_repo_path = os.path.abspath(os.path.expanduser(ArchRepoDBPath))
     download_urls = get_github_latest_releases_download_url(
         UserName, GitHubRepoName)
         
