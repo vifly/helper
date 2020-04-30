@@ -3,6 +3,7 @@ import json
 import os
 import subprocess
 import requests
+import tqdm
 from requests.compat import urljoin, urlparse
 
 from conf import *
@@ -81,10 +82,15 @@ def download_file(url: str, storage_path: str, force_download: bool = False):
         return
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
+        file_length = int(r.headers.get("content-length"))
+        pbar = tqdm.tqdm(total=file_length, unit='B', unit_scale=True)
         with open(storage_path, 'wb') as f:
             for chunk in r.iter_content(chunk_size=8192):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
+                    pbar.update(8192)
+                else:
+                    pbar.close()
 
 
 def update_arch_repo(package_path: str, repo_path: str, repo_name: str):
