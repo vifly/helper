@@ -30,11 +30,18 @@ def strip_scheme(url: str) -> str:
     return parse_result.geturl().replace(scheme, '', 1)
 
 
+def join_proxy_url(url: str) -> str:
+    if ProxyURL != "":
+        strip_url = strip_scheme(url)
+        return urljoin(ProxyURL, strip_url)
+    else:
+        return url
+
+
 def get_github_repos_latest_releases_api_url(user_name: str,
                                              repo_name: str) -> str:
     api_url = f"https://api.github.com/repos/{user_name}/{repo_name}/releases/latest"
-    api_url = strip_scheme(api_url)
-    return urljoin(ProxyURL, api_url)
+    return join_proxy_url(api_url)
 
 
 def get_github_latest_releases_download_url(user_name: str,
@@ -61,7 +68,7 @@ def get_github_latest_releases_download_url(user_name: str,
         i["browser_download_url"] for i in api_response_json["assets"]
     ]
     proxy_download_urls = [
-        urljoin(ProxyURL, strip_scheme(url)) for url in download_urls
+        join_proxy_url(url) for url in download_urls
     ]
 
     return proxy_download_urls
