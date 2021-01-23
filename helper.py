@@ -105,6 +105,9 @@ def update_arch_repo(package_path: str, repo_path: str, repo_name: str):
     subprocess.run(
         f"repo-add {db_path} {os.path.join(package_path, '*.tar.xz')}",
         shell=True)
+    subprocess.run(
+        f"repo-add {db_path} {os.path.join(package_path, '*.tar.zst')}",
+        shell=True)
 
 
 def main():
